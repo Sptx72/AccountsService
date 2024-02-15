@@ -44,7 +44,7 @@ logging:
   path: /var/tmp/
   file: /var/tmp/mylog.log
   level:
-    root: WARN
+    root: INFO
 
 
 ---
