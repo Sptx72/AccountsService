@@ -1,6 +1,7 @@
 package com.microcompany.accountsservice.services;
 
 import com.microcompany.accountsservice.exception.AccountNotfoundException;
+import com.microcompany.accountsservice.exception.GlobalException;
 import com.microcompany.accountsservice.model.Account;
 import com.microcompany.accountsservice.model.Customer;
 import com.microcompany.accountsservice.persistence.AccountRepository;
@@ -65,6 +66,8 @@ public class AccountService implements IAccountService {
         Account newAccount = accountRepository.findById(id).orElseThrow(() -> new AccountNotfoundException(id));
         Customer owner = null; // Will be gotten from user service
         int newBalance = newAccount.getBalance() - amount;
+        if(newBalance<0)
+            throw new GlobalException("balance is negative");
         newAccount.setBalance(newBalance);
         return accountRepository.save(newAccount);
     }
