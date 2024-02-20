@@ -37,16 +37,13 @@ spring:
     console.enabled: true
     console.path: /h2-ui
 
-server:
-  port: 9090
-  #TODO Add HTTPS Configuration
+#TODO Add HTTPS Configuration
 
 logging:
   path: /var/tmp/
   file: /var/tmp/mylog.log
   level:
     root: INFO
-
 
 ---
 spring:
