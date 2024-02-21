@@ -2,6 +2,7 @@ package com.microcompany.accountsservice.services;
 
 import com.microcompany.accountsservice.exception.AccountNotfoundException;
 import com.microcompany.accountsservice.exception.GlobalException;
+import com.microcompany.accountsservice.exception.UserNotFoundException;
 import com.microcompany.accountsservice.model.Account;
 import com.microcompany.accountsservice.model.Customer;
 import com.microcompany.accountsservice.persistence.AccountRepository;
@@ -82,7 +83,9 @@ public class AccountService implements IAccountService {
     public void deleteAccountsUsingOwnerId(Long ownerId) {
         //crear UserNotFoundException
 
-        List<Account> accounts = accountRepository.findByOwnerId(ownerId).orElseThrow(() -> new AccountNotfoundException(ownerId));;
+        List<Account> accounts = accountRepository.findByOwnerId(ownerId).get();
+        if (accounts.isEmpty())
+            throw new UserNotFoundException();
         for (Account account : accounts) {
             this.accountRepository.delete(account);
         }

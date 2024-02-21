@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 public class GlobalExceptionController {
     @ExceptionHandler(GlobalException.class)
@@ -21,6 +23,10 @@ public class GlobalExceptionController {
     }
      @ExceptionHandler(UserNotFoundException.class)
     ResponseEntity<Object> noSuchElementExceptionHandler(UserNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Excepcion de usuario");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+     @ExceptionHandler(ConstraintViolationException.class)
+     ResponseEntity<Object> constraintViolationExceptionHandler(ConstraintViolationException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }
