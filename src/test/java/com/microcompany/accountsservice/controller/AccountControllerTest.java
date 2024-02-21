@@ -59,8 +59,4 @@ public class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());
     }
-    @AfterEach
-    public void reloadDB(){
-
-    }
 }
