@@ -1,4 +1,4 @@
-package controller;
+package com.microcompany.accountsservice.controller;
 
 import com.microcompany.accountsservice.AccountsServiceApplication;
 import com.microcompany.accountsservice.model.Account;

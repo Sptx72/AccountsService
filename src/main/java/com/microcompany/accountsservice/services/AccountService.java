@@ -80,7 +80,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public void deleteAccountsUsingOwnerId(Long ownerId) {
+    public List<Account> deleteAccountsUsingOwnerId(Long ownerId) {
         //crear UserNotFoundException
 
         List<Account> accounts = accountRepository.findByOwnerId(ownerId).get();
@@ -89,6 +89,7 @@ public class AccountService implements IAccountService {
         for (Account account : accounts) {
             this.accountRepository.delete(account);
         }
+        return accounts;
     }
 
 
