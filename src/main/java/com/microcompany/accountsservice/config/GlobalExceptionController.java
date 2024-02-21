@@ -27,6 +27,6 @@ public class GlobalExceptionController {
     }
      @ExceptionHandler(ConstraintViolationException.class)
      ResponseEntity<Object> constraintViolationExceptionHandler(ConstraintViolationException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
     }
 }

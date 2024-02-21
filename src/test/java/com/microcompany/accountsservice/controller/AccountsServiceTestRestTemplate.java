@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
@@ -24,12 +25,13 @@ public class AccountsServiceTestRestTemplate {
     private int port;
     @Autowired
     private TestRestTemplate restTemplate;
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @Test
     public void givenUrl_whenDepositMoney_thenStatusOkAndBalanceIsGreaterOrEqualToAmount() throws Exception {
         int amount=100;
         String URIPut ="/accounts/deposit?accountId=1&amount=" + amount + "&ownerId=1";
          Account account =new Account(1L, "algo",new Date(),0,1L,null);
-         RequestEntity<Account> request = RequestEntity.put(URIPut).contentType(MediaType.APPLICATION_JSON).body(null);
+         RequestEntity<Void> request = RequestEntity.put(URIPut).contentType(MediaType.APPLICATION_JSON).build();
        ResponseEntity<Account> response = restTemplate.exchange(
                request, Account.class
        );
@@ -39,7 +41,7 @@ public class AccountsServiceTestRestTemplate {
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }
     @Test
-     public void givenUrl_whenDepositNegativeInteger_thenStatusOkAndBalanceIsGreaterOrEqualToAmount() throws Exception {
+     public void givenUrl_whenDepositNegativeInteger_thenStatusPreconditionFailedAndBalanceIsGreaterOrEqualToAmount() throws Exception {
         int amount=-100;
         String URIPut ="/accounts/deposit?accountId=1&amount=" + amount + "&ownerId=1";
          Account account =new Account(1L, "algo",new Date(),0,1L,null);
