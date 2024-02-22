@@ -26,8 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class ApplicationSecurity {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationSecurity.class);
 
-    @Autowired
-    private UserRepository userRepo;
+
     @Autowired
     private JwtTokenFilter jwtTokenFilter;
 
@@ -37,12 +36,7 @@ public class ApplicationSecurity {
 
             @Override
             public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-                return userRepo.findByEmail(email)
-                        .orElseThrow(
-                                () -> new UsernameNotFoundException(
-                                        "User " + email + " not found"
-                                )
-                        );
+                return null;
             }
         };
     }
