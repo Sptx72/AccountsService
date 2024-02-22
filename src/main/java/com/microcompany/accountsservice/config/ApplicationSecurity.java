@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.microcompany.accountsservice.jwt.JwtTokenFilter;
 import com.microcompany.accountsservice.model.ERole;
-import com.microcompany.accountsservice.persistence.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +82,9 @@ public class ApplicationSecurity {
                         ).permitAll() // HABILITAR ESPACIOS LIBRES
 //                        .antMatchers("/**").permitAll() // BARRA LIBRE
 //                        .antMatchers("/products/**").hasAuthority(ERole.USER.name())
-                        .antMatchers(HttpMethod.GET, "/products/**").hasAnyAuthority(ERole.USER.name(), ERole.ADMIN.name())//Para acceder a productos debe ser USER
-                        .antMatchers("/products/**").hasAnyAuthority(ERole.ADMIN.name()) //admin puede hacer de todo
+                        .antMatchers(HttpMethod.POST, "/accounts/**").hasAnyAuthority(ERole.GESTOR.name())//Para acceder a productos debe ser GESTOR
+                        .antMatchers(HttpMethod.PUT,"/accounts/deposit/**").hasAnyAuthority(ERole.CLIENTE.name())
+                        .antMatchers(HttpMethod.PUT,"/accounts/withdraw/**").hasAnyAuthority(ERole.CLIENTE.name())
                         .anyRequest().authenticated()
                 );
 
