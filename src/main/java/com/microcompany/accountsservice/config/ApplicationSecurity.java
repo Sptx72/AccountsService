@@ -1,24 +1,30 @@
 package com.microcompany.accountsservice.config;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.microcompany.accountsservice.jwt.JwtTokenFilter;
 import com.microcompany.accountsservice.model.ERole;
+import com.microcompany.accountsservice.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Configuration
@@ -31,12 +37,21 @@ public class ApplicationSecurity {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
+        return email -> {
+            List<User> users = new ArrayList<>();
 
-            @Override
-            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-                return null;
-            }
+            User client = new User(1, "client@example.com", "passwordclient123", ERole.CLIENTE);
+            User manager = new User(2, "manager@example.com", "passwordmanager123", ERole.GESTOR);
+
+            users.add(client);
+            users.add(manager);
+
+            User current = users.stream().filter(user -> user.getEmail().equals(email)).collect(Collectors.toList()).stream().findFirst().get();
+
+            if (!current.getEmail().equals(email))
+                throw new UsernameNotFoundException("Username ".concat(email).concat(" not found"));
+
+            return current;
         };
     }
 
